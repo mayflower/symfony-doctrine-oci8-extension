@@ -1,15 +1,14 @@
+# This file is auto-generated during the composer install
 parameters:
-    database_driver:   pdo_mysql
-    database_host:     127.0.0.1
-    database_port:     ~
-    database_name:     symfony
-    database_user:     root
-    database_password: ~
-
-    mailer_transport:  smtp
-    mailer_host:       127.0.0.1
-    mailer_user:       ~
-    mailer_password:   ~
-
-    locale:            en
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    database_driver_class: Mayflower\Oci8TestBundle\Library\Doctrine\Driver\MyOCI8\Driver
+    database_host: localhost
+    database_port: 1521
+    database_name: symfony
+    database_user: orauser
+    database_password: orapassword
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    locale: de
+    secret: fdsaksvoiewjlkövadslkfqq
