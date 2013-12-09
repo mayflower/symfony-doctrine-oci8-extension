@@ -1,0 +1,4 @@
+mayflower_oci8_test:
+    resource: "@MayflowerOci8TestBundle/Resources/config/routing.yml"
+    prefix:   /
+

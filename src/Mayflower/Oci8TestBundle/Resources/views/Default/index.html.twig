@@ -1,0 +1,33 @@
+<html>
+<head>
+
+</head>
+<body>
+<h1>
+Hello {{ name }}!
+</h1>
+<p>
+    Total File Size {{ totalSize }}
+</p>
+    <table border="1">
+    <thead>
+    <tr>
+        <th>row</th>
+        <th>Id</th>
+        <th>Filename</th>
+        <th>FileSize</th>
+        <th>MimeType</th>
+    </tr>
+    </thead>
+        {% for asset in assets %}
+        <tr>
+            <td>{{ asset.row }}</td>
+            <td><a href="/image/{{ asset.id }}">{{ asset.id }}</a></td>
+            <td>{{ asset.filename }}</td>
+            <td>{{ asset.filesize }}</td>
+            <td>{{ asset.mimetype }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,7 @@
+parameters:
+#    mayflower_oci8_test.example.class: Mayflower\Oci8TestBundle\Example
+
+services:
+#    mayflower_oci8_test.example:
+#        class: %mayflower_oci8_test.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
