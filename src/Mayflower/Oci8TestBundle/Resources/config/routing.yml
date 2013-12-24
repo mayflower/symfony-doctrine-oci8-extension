@@ -5,3 +5,7 @@ mayflower_oci8_test_homepage:
 mayflower_oci8_test_image:
     pattern:  /image/{id}
     defaults: { _controller: MayflowerOci8TestBundle:Default:image }
+
+mayflower_oci8_test_upload_form:
+    pattern:  /form
+    defaults: { _controller: MayflowerOci8TestBundle:Default:form }

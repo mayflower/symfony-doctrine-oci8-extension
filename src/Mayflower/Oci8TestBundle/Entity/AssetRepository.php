@@ -12,4 +12,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class AssetRepository extends EntityRepository
 {
+
+    /**
+     * @return mixed
+     */
+    public function getMaxId()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select($qb->expr()->max('a.id'))
+            ->from(Asset::NAME, 'a');
+
+        $result = $qb->getQuery()->getScalarResult();
+
+        return $result[0][1];
+    }
 }

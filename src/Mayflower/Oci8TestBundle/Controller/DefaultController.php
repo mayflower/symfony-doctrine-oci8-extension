@@ -2,9 +2,12 @@
 
 namespace Mayflower\Oci8TestBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Mayflower\Oci8TestBundle\Entity\Asset;
 use Mayflower\Oci8TestBundle\Entity\AssetRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -86,6 +89,78 @@ class DefaultController extends Controller
             200,
             $headers
         );
+    }
+
+    /**
+     * @return Response
+     */
+    public function formAction()
+    {
+        $formBuilderImage = $this->createFormBuilder();
+        $formBuilderImage->add("image", 'file', ['required' => true, 'label' => "File to Upload: "]);
+        $formBuilderImage->add("Submit", 'submit');
+        $notice      = '';
+        $trace       = '';
+        $noticeColor = 'green';
+
+        $form    = $formBuilderImage->getForm();
+        $request = $this->getRequestStack()->getMasterRequest();
+
+        if ($request->getMethod() == 'POST') {
+            $form->submit($request);
+            if ($form->isValid() && !$form->getData()['image']->getError()) {
+                try {
+                    /** @var EntityManagerInterface $em */
+                    $em = $this->getDoctrine()->getManager();
+                    /** @var AssetRepository $assetRepo */
+                    $assetRepo = $em->getRepository(Asset::NAME);
+                    $maxId     = $assetRepo->getMaxId();
+
+                    /** @var UploadedFile $content */
+                    $content      = $form->getData()['image'];
+                    $size         = $content->getSize();
+                    $mimeType     = $content->getClientMimeType();
+                    $origName     = $content->getClientOriginalName();
+                    $uploadedFile = $content->getRealPath();
+
+                    $newAsset = new Asset();
+                    $newAsset->setId($maxId + 1);
+                    $newAsset->setFileName($origName);
+                    $newAsset->setFileSize($size);
+                    $newAsset->setMimeType($mimeType);
+                    $newAsset->setContent(file_get_contents($uploadedFile));
+
+                    $em->persist($newAsset);
+                    $em->flush();
+
+                    $notice = "{$origName} is Uploaded!";
+                } catch (\Exception $e) {
+                    $notice      = 'Failure to Upload File!';
+                    $trace       = $e->getTraceAsString();
+                    $noticeColor = 'red';
+                }
+            } else {
+                /** @var UploadedFile $content */
+                $content     = $form->getData()['image'];
+                $notice      = $content->geterrorMessage();
+                $noticeColor = 'red';
+            }
+        }
+
+
+        return $this->render(
+            'MayflowerOci8TestBundle:Default:upload.html.twig',
+            ['notice' => $notice, 'noticeColor' => $noticeColor, 'trace' => $trace, 'form' => $form->createView()]
+        );
+
+    }
+
+    /**
+     * @return RequestStack
+     */
+    protected function getRequestStack()
+    {
+        return $this->container->get('request_stack');
     }
 
     /**
