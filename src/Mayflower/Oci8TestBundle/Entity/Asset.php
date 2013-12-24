@@ -4,7 +4,6 @@ namespace Mayflower\Oci8TestBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-// * @ORM\Table(name="MO3_FILES")
 /**
  * Asset
  *

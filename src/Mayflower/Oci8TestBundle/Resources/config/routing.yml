@@ -1,7 +1,7 @@
 mayflower_oci8_test_homepage:
-    pattern:  /hello/{name}
+    pattern:  /
     defaults: { _controller: MayflowerOci8TestBundle:Default:index }
 
 mayflower_oci8_test_image:
-    pattern:  /image/{name}
+    pattern:  /image/{id}
     defaults: { _controller: MayflowerOci8TestBundle:Default:image }

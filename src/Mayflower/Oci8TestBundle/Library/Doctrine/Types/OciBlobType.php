@@ -34,8 +34,10 @@ class OciBlobType extends Type
     /**
      * {@inheritdoc}
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
-    {
+    public function getSQLDeclaration(
+        array $fieldDeclaration,
+        AbstractPlatform $platform
+    ) {
         return $platform->getBlobTypeDeclarationSQL($fieldDeclaration);
     }
 
@@ -49,18 +51,21 @@ class OciBlobType extends Type
         }
 
         if (is_object($value) && get_class($value) == 'OCI-Lob') {
-            if (!in_array('ocilob', stream_get_wrappers())) {
-                stream_wrapper_register("ocilob", "\\Mayflower\\Oci8TestBundle\\Library\\StreamWrapperOci8Lob");
+            if (!in_array('ociLob', stream_get_wrappers())) {
+                stream_wrapper_register(
+                    "ociLob",
+                    "\\Mayflower\\Oci8TestBundle\\Library\\StreamWrapperOci8Lob"
+                );
             }
-            $context = stream_context_create(['ocilob' => ['value' => $value]]);
-            $value = fopen("ocilob://value", 'r', false, $context);
+            $context = stream_context_create(['ociLob' => ['ociLobObj' => $value]]);
+            $value   = fopen("ociLob://ociLobObj", 'r', false, $context);
         }
 
         if (is_string($value)) {
             $value = fopen('data://text/plain;base64,' . base64_encode($value), 'r');
-        } 
+        }
         
-        if ( ! is_resource($value)) {
+        if (!is_resource($value)) {
             throw ConversionException::conversionFailed($value, self::BLOB);
         }
 
